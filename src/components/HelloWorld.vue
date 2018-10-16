@@ -11,21 +11,27 @@
         >
           {{ value }}
         </v-progress-circular>
+        <v-pagination v-model="page" :length="15" :total-visible="7" @input="next"></v-pagination>
       </v-layout>
     </v-slide-y-transition>
   </v-container>
 </template>
 
 <script>
+import { VProgressCircular } from 'vuetify/es5/components/VProgressCircular';
+import { VPagination } from 'vuetify/es5/components/VPagination';
+
 export default {
   name: 'HelloWorld',
   props: {
     msg: String
   },
+  components: {'v-progress-circular': VProgressCircular, 'v-pagination': VPagination},
   data() {
     return {
       interval: {},
-      value: 0
+      value: 0,
+      page: 1
     }
   },
   beforeDestroy () {
@@ -33,12 +39,17 @@ export default {
   },
   mounted () {
     this.interval = setInterval(() => {
-      if (this.value === 100) {
+      if (this.value >= 100) {
         return (this.value = 0)
       }
       this.value += 10
     }, 1000)
-  }    
+  },
+  methods: {
+    next (page) {
+      this.value = parseInt(100/15*page);
+    }
+  }     
 }
 </script>
 
